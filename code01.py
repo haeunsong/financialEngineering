@@ -61,3 +61,9 @@ for n in range(len(dates)):
   this_close = prices[n*4].text 
   this_close = remove_comma(this_close)
   print(this_date,this_close)
+
+# 4. 전체 페이지에서 데이터 가져오기
+# 4.1. 마지막 페이지 주소를 가리키는 하이퍼링크 주소 뽑아오기
+paging = source.find('td',class_='pgRR').find('a')['href']
+# 4.1.1 페이지 번호만 뽑아오기
+last_page = (int(paging.split('&')[1].split('=')[1]))
