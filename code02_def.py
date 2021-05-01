@@ -10,6 +10,7 @@ headers = {
 
 def getClosingPrice(index_cd,start_date='',end_date='',page_n=0,last_page=0):
 
+  flag = False 
   # 문자열 형식 날짜 => data 포맷으로 변환
   start_date = dt.datetime.strptime(start_date, "%Y.%m.%d").date()
   end_date = dt.datetime.strptime(end_date, "%Y.%m.%d").date()
@@ -21,8 +22,10 @@ def getClosingPrice(index_cd,start_date='',end_date='',page_n=0,last_page=0):
     source = urlopen(url).read()  # 지정한 페이지에서 코드 읽기
     source = bs4.BeautifulSoup(source, 'lxml')
 
-    dates = source.find_all('td', class_='date')
-    prices = source.find_all('td', class_='number_1')
+    dates = source.find_all('td', class_='date') # 날짜
+    prices = source.find_all('td', class_='number_1') # 종가
+    rate_down = source.find_all('td',class_='rate_down') # 전일비
+
 
     for i in range(0,len(dates)):
       this_date = dates[i].text 
@@ -32,7 +35,20 @@ def getClosingPrice(index_cd,start_date='',end_date='',page_n=0,last_page=0):
         # 종가 구하기
         this_close =  prices[i*4].text 
         print(this_date,this_close)
+        # 전일비 구하기
+        # print(rate_down)
+      else:
+        print('종료')
+        flag = True 
+        break
+    if flag==True: break
+
+  
+
+  
 
 
-getClosingPrice('KPI200','2020.04.01','2021.05.01')
+
+
+getClosingPrice('KPI200','2021.04.01','2021.05.01')
 
